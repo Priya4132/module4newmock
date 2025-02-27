@@ -1,14 +1,16 @@
-import { addNotes, fetchNotes, removeNotes } from '@/redux/actions/actions';
+import { addNotes, fetchNotes, logout, removeNotes } from '@/redux/actions/actions';
 import { Grid, Text,Box, Textarea, VStack ,Button, Flex,Input, GridItem} from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
 import { FaTrash } from 'react-icons/fa';
 import { useSelector } from 'react-redux'
 import { useDispatch } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
 const NotesList = () => {
     const [title,setTitle]=useState("");
     const [comment,setComment]=useState("");
     const user=useSelector((state)=>state.auth.user)
+const navigate=useNavigate();
 
     const userDetails=JSON.parse(localStorage.getItem("user"));
     const notes=useSelector((state)=>state.notes.notes);
@@ -42,6 +44,11 @@ const NotesList = () => {
        }
        
        }
+       const handleLogout=async()=>{
+             dispatch(logout());
+             navigate("/login")
+             
+           }
 
        //handleremove button
        const handleRemove=async(id)=>{
@@ -51,7 +58,8 @@ const NotesList = () => {
        }
   return (
    <>
-  
+   {user && <Button onClick={handleLogout}>Logout</Button> }
+ <Text></Text>
    <Flex width={"90%"} m={4}>
    <Input m={2} type="text" placeholder='Enter Notes' value={title} onChange={(e)=>setTitle(e.target.value)}/>
    <Input m={2} type="text" placeholder='Enter Comments' value={comment} onChange={(e)=>setComment(e.target.value)}/>
